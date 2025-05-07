@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Amharic Streak Tracker</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="tracker" id="trackerForm">
+    <div id="streakHeader">📅 You're on a streak!</div>
+    <input type="text" id="name" placeholder="Your name" required />
+    <input type="email" id="email" placeholder="Your email" required />
+    <div class="motivation">Check in daily to grow your streak. Miss a day, and it resets. Let’s build consistency!</div>
+    <button onclick="markToday()">✅ I Practiced Today</button>
+    <div id="response" class="success" style="display:none;"></div>
+    <div id="error" class="error" style="display:none;"></div>
+  </div>
+  <div class="thank-you" id="thankYouMessage"></div>
+  <script src="script.js"></script>
+</body>
+</html>

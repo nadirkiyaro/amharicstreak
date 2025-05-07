@@ -1,0 +1,56 @@
+body {
+  font-family: sans-serif;
+  background: #f3f0ff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  margin: 0;
+  padding: 20px;
+}
+.tracker {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 420px;
+  text-align: center;
+}
+#streakHeader {
+  font-size: 24px;
+  color: #4a266a;
+  margin-bottom: 8px;
+}
+.motivation {
+  color: #444;
+  font-size: 14px;
+  margin-bottom: 20px;
+}
+input, button {
+  font-size: 16px;
+  padding: 10px;
+  margin: 10px 0;
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+button {
+  background-color: #7a4fd2;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+.success, .error {
+  margin-top: 20px;
+  font-weight: bold;
+}
+.success { color: green; }
+.error { color: red; }
+.thank-you {
+  font-size: 16px;
+  margin-top: 20px;
+  color: #4a266a;
+  display: none;
+}
