@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Duo Streak Tracker</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #f3f0ff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+    }
+    .tracker {
+      background: white;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 420px;
+      text-align: center;
+    }
+    #streakHeader {
+      font-size: 24px;
+      color: #4a266a;
+      margin-bottom: 8px;
+    }
+    .motivation {
+      color: #444;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+    input, button {
+      font-size: 16px;
+      padding: 10px;
+      margin: 10px 0;
+      width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+    }
+    button {
+      background-color: #7a4fd2;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .success, .error {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+    .success { color: green; }
+    .error { color: red; }
+    .thank-you {
+      font-size: 16px;
+      margin-top: 20px;
+      color: #4a266a;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="tracker" id="trackerForm">
+    <div id="streakHeader">📅 You're on a streak!</div>
+    <input type="text" id="name" placeholder="Your name" required />
+    <input type="email" id="email" placeholder="Your email" required />
+    <div class="motivation">Check in daily to grow your streak. Miss a day, and it resets. Let’s build consistency!</div>
+    <button onclick="markToday()">✅ I Practiced Today</button>
+    <div id="response" class="success" style="display:none;"></div>
+    <div id="error" class="error" style="display:none;"></div>
+  </div>
+  <div class="thank-you" id="thankYouMessage"></div>
+
+  <script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/YOUR_DEPLOYED_URL/exec";
+    let submissionInProgress = false;
+
+    function updateStreakDisplay(name, email) {
+      fetch(`${SCRIPT_URL}?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&mode=read`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.success && data.streak !== undefined) {
+            document.getElementById("streakHeader").textContent = `🔥 You're on a ${data.streak}-day streak!`;
+          }
+        });
+    }
+
+    function markToday() {
+      if (submissionInProgress) return;
+      submissionInProgress = true;
+
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const responseDiv = document.getElementById("response");
+      const errorDiv = document.getElementById("error");
+      const thankYou = document.getElementById("thankYouMessage");
+      const trackerForm = document.getElementById("trackerForm");
+
+      responseDiv.style.display = 'none';
+      errorDiv.style.display = 'none';
+      thankYou.style.display = 'none';
+
+      if (!name || !email) {
+        errorDiv.textContent = "Please fill in both fields.";
+        errorDiv.style.display = 'block';
+        submissionInProgress = false;
+        return;
+      }
+
+      localStorage.setItem("streakName", name);
+      localStorage.setItem("streakEmail", email);
+
+      fetch(`${SCRIPT_URL}?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            document.getElementById("streakHeader").textContent = data.message;
+            responseDiv.textContent = "✅ Submission successful!";
+            responseDiv.style.display = 'block';
+            thankYou.innerHTML = `🎉 Great job! You are now on a <strong>${data.streak}-day streak</strong>.<br>Come back tomorrow to keep it going! 💪`;
+            thankYou.style.display = 'block';
+            trackerForm.style.display = 'none';
+          } else {
+            document.getElementById("streakHeader").textContent = data.message;
+            errorDiv.textContent = data.message;
+            errorDiv.style.display = 'block';
+          }
+        })
+        .catch(() => {
+          errorDiv.textContent = "Error connecting. Please try again.";
+          errorDiv.style.display = 'block';
+        })
+        .finally(() => {
+          submissionInProgress = false;
+        });
+    }
+
+    window.onload = () => {
+      const savedName = localStorage.getItem("streakName");
+      const savedEmail = localStorage.getItem("streakEmail");
+      if (savedName && savedEmail) {
+        document.getElementById("name").value = savedName;
+        document.getElementById("email").value = savedEmail;
+        updateStreakDisplay(savedName, savedEmail);
+      }
+    };
+  </script>
+</body>
+</html>
