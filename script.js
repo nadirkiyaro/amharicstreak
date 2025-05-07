@@ -1,4 +1,4 @@
-const SCRIPT_URL = "https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxiqydmU36vp4gx3tT4SFJvfk3rgURJ1nMYZJkH77BJDWj-ieG4OaDygU2m0gqJOhuz/exec";
 let submissionInProgress = false;
 
 function updateStreakDisplay(name, email) {
