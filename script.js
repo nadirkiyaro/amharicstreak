@@ -1,8 +1,10 @@
+// 🔁 Replace this with your new deployment URL from Google Apps Script
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxiqydmU36vp4gx3tT4SFJvfk3rgURJ1nMYZJkH77BJDWj-ieG4OaDygU2m0gqJOhuz/exec";
+
 let submissionInProgress = false;
 
 function updateStreakDisplay(name, email) {
-  fetch(`${SCRIPT_URL}?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&mode=read`)
+  fetch(`${SCRIPT_URL}?email=${encodeURIComponent(email)}&mode=read`)
     .then(res => res.json())
     .then(data => {
       if (data.success && data.streak !== undefined) {
@@ -70,3 +72,4 @@ window.onload = () => {
     updateStreakDisplay(savedName, savedEmail);
   }
 };
+
