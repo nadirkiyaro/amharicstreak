@@ -1,10 +1,10 @@
-// 🔁 Replace this with your new deployment URL from Google Apps Script
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxiqydmU36vp4gx3tT4SFJvfk3rgURJ1nMYZJkH77BJDWj-ieG4OaDygU2m0gqJOhuz/exec";
-
 let submissionInProgress = false;
 
 function updateStreakDisplay(name, email) {
-  fetch(`${SCRIPT_URL}?email=${encodeURIComponent(email)}&mode=read`)
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+  fetch(`${SCRIPT_URL}?email=${encodeURIComponent(email)}&mode=read&timezone=${encodeURIComponent(timezone)}`)
     .then(res => res.json())
     .then(data => {
       if (data.success && data.streak !== undefined) {
@@ -19,6 +19,8 @@ function markToday() {
 
   const name = document.getElementById("name").value.trim();
   const email = document.getElementById("email").value.trim();
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
   const responseDiv = document.getElementById("response");
   const errorDiv = document.getElementById("error");
   const thankYou = document.getElementById("thankYouMessage");
@@ -38,7 +40,7 @@ function markToday() {
   localStorage.setItem("streakName", name);
   localStorage.setItem("streakEmail", email);
 
-  fetch(`${SCRIPT_URL}?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}`)
+  fetch(`${SCRIPT_URL}?name=${encodeURIComponent(name)}&email=${encodeURIComponent(email)}&timezone=${encodeURIComponent(timezone)}`)
     .then(res => res.json())
     .then(data => {
       if (data.success) {
@@ -72,4 +74,5 @@ window.onload = () => {
     updateStreakDisplay(savedName, savedEmail);
   }
 };
+
 
